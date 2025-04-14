@@ -31,21 +31,42 @@ const SlackStatus: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (!users.length) return <div>No user data found.</div>;
 
+  const half = Math.ceil(users.length / 2);
+  const leftUsers = users.slice(0, half);
+  const rightUsers = users.slice(half);
+
   return (
     <div className="slack-container">
-      {users.map((user) => (
-        <div
-          key={user.id}
-          className={`slack-user ${user.presence === "active" ? "active" : "inactive"}`}
-        >
-          <img src={user.image} alt={user.real_name} />
-          <div className="user-info">
-            <p>{user.real_name}</p>
-          </div>
+      <div className="split-columns">
+        <div className="column">
+          {leftUsers.map((user) => (
+            <div
+              key={user.id}
+              className={`slack-user ${user.presence === "active" ? "active" : "inactive"}`}
+            >
+              <img src={user.image} alt={user.real_name} />
+              <div className="user-info">
+                <p>{user.real_name}</p>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+        <div className="column">
+          {rightUsers.map((user) => (
+            <div
+              key={user.id}
+              className={`slack-user ${user.presence === "active" ? "active" : "inactive"}`}
+            >
+              <img src={user.image} alt={user.real_name} />
+              <div className="user-info">
+                <p>{user.real_name}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
-  );
+  );  
 };
 
 export default SlackStatus;
