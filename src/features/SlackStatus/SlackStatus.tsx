@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "../../styles/styles.scss";
-
-interface SlackUserInfo {
-  id: string;
-  real_name: string;
-  image: string;
-  presence: string;
-}
+import React, { useEffect } from "react";
+import { useAppDispatch } from "../../store/utilities/useAppDispatch"; // Use typed dispatch
+import { fetchSlackUsers } from "../../components/SlackUser/slackUserActionCreators"; // Fetch action creator
+import { useAppStateSelector } from "../../store/utilities/useAppStateSelector"; // For state selector
+import SlackUser from "../../components/SlackUser/SlackUser"; // SlackUser component
+import "../../styles/styles.scss"; // Import styles
 
 const SlackStatus: React.FC = () => {
-  const [users, setUsers] = useState<SlackUserInfo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch(); 
+  const { users, loading, error } = useAppStateSelector((state) => state.slackUser); // Get state from redux
 
   useEffect(() => {
-    const fetchSlackUsers = async () => {
-      try {
-        const response = await axios.get("https://vwzbvkln-3000.use.devtunnels.ms/status/slack/users");
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSlackUsers();
-  }, []);
+    dispatch(fetchSlackUsers()); // Dispatch fetchSlackUsers action to fetch data on mount
+  }, [dispatch]);
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
   if (!users.length) return <div>No user data found.</div>;
 
   const half = Math.ceil(users.length / 2);
@@ -40,33 +26,17 @@ const SlackStatus: React.FC = () => {
       <div className="split-columns">
         <div className="column">
           {leftUsers.map((user) => (
-            <div
-              key={user.id}
-              className={`slack-user ${user.presence === "active" ? "active" : "inactive"}`}
-            >
-              <img src={user.image} alt={user.real_name} />
-              <div className="user-info">
-                <p>{user.real_name}</p>
-              </div>
-            </div>
+            <SlackUser key={user.id} user={user} /> 
           ))}
         </div>
         <div className="column">
           {rightUsers.map((user) => (
-            <div
-              key={user.id}
-              className={`slack-user ${user.presence === "active" ? "active" : "inactive"}`}
-            >
-              <img src={user.image} alt={user.real_name} />
-              <div className="user-info">
-                <p>{user.real_name}</p>
-              </div>
-            </div>
+            <SlackUser key={user.id} user={user} />
           ))}
         </div>
       </div>
     </div>
-  );  
+  );
 };
 
 export default SlackStatus;
