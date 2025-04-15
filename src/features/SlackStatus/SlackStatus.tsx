@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import SlackUser from "../../components/SlackUser/SlackUser";
 import "../../styles/styles.scss";
 
 interface SlackUserInfo {
@@ -40,33 +41,17 @@ const SlackStatus: React.FC = () => {
       <div className="split-columns">
         <div className="column">
           {leftUsers.map((user) => (
-            <div
-              key={user.id}
-              className={`slack-user ${user.presence === "active" ? "active" : "inactive"}`}
-            >
-              <img src={user.image} alt={user.real_name} />
-              <div className="user-info">
-                <p>{user.real_name}</p>
-              </div>
-            </div>
+            <SlackUser key={user.id} user={user} />
           ))}
         </div>
         <div className="column">
           {rightUsers.map((user) => (
-            <div
-              key={user.id}
-              className={`slack-user ${user.presence === "active" ? "active" : "inactive"}`}
-            >
-              <img src={user.image} alt={user.real_name} />
-              <div className="user-info">
-                <p>{user.real_name}</p>
-              </div>
-            </div>
+            <SlackUser key={user.id} user={user} />
           ))}
         </div>
       </div>
     </div>
-  );  
+  );
 };
 
 export default SlackStatus;
