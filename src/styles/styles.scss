@@ -57,6 +57,13 @@ body {
   }
 }
 
+.status-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
 .status {
   display: flex;
   align-items: center;

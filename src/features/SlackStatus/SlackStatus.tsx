@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SlackUser from "../../components/SlackUser/SlackUser";
+import Weather from "../../components/Weather/Weather";
 import "../../styles/styles.scss";
 
 interface SlackUserInfo {
@@ -30,10 +31,8 @@ const SlackStatus: React.FC = () => {
     };
 
     fetchSlackUsers();
-
-    const interval = setInterval(fetchSlackUsers, 60000); // refresh every 60 sec
-
-    return () => clearInterval(interval); // clean up on unmount
+    const interval = setInterval(fetchSlackUsers, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -44,17 +43,21 @@ const SlackStatus: React.FC = () => {
   const rightUsers = users.slice(half);
 
   return (
-    <div className="slack-container">
-      <div className="split-columns">
-        <div className="column">
-          {leftUsers.map((user) => (
-            <SlackUser key={user.id} user={user} />
-          ))}
-        </div>
-        <div className="column">
-          {rightUsers.map((user) => (
-            <SlackUser key={user.id} user={user} />
-          ))}
+    <div className="status-page">
+      <Weather /> 
+      
+      <div className="slack-container">
+        <div className="split-columns">
+          <div className="column">
+            {leftUsers.map((user) => (
+              <SlackUser key={user.id} user={user} />
+            ))}
+          </div>
+          <div className="column">
+            {rightUsers.map((user) => (
+              <SlackUser key={user.id} user={user} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
