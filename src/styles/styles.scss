@@ -57,6 +57,21 @@ body {
   }
 }
 
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.status-emoji {
+  font-size: 25px;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+img.status-custom-emoji {
+  width: 30px;
+  height: 30px;
+}
+
 @media (max-width: 768px) {
   .slack-container {
     width: 100%;

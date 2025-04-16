@@ -8,6 +8,9 @@ interface SlackUserInfo {
   real_name: string;
   image: string;
   presence: string;
+  status_text?: string;
+  status_emoji?: string;
+  huddle_state?: string;
 }
 
 const SlackStatus: React.FC = () => {
@@ -27,6 +30,10 @@ const SlackStatus: React.FC = () => {
     };
 
     fetchSlackUsers();
+
+    const interval = setInterval(fetchSlackUsers, 60000); // refresh every 60 sec
+
+    return () => clearInterval(interval); // clean up on unmount
   }, []);
 
   if (loading) return <div>Loading...</div>;
