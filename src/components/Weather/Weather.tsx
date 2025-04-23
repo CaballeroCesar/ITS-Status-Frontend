@@ -3,10 +3,10 @@ import { weatherCodeMap } from "./weatherCodeMap";
 import "../../styles/Weather.scss";
 
 interface WeatherData {
-    temperature: number;
-    weathercode: number;
-  }
-  
+  temperature: number;
+  weathercode: number;
+}
+
 const Weather: React.FC = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
 
@@ -31,6 +31,13 @@ const Weather: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // ** Instead of conditional rendering (weather ? ...), move this to a function **
+  // ** See renderEmoji in SlackUser.tsx as an example **
+
+  // ** Create functions that will be returned in the TSX markup **
+  // ** <WeatherEmoji /> **
+  // ** <WeatherTemperature /> **
+  // ** <WeatherLabel /> **
   return (
     <div className="weather-widget">
       {weather ? (

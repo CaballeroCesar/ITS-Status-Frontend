@@ -21,7 +21,9 @@ const SlackStatus: React.FC = () => {
   useEffect(() => {
     const fetchSlackUsers = async () => {
       try {
-        const response = await axios.get("https://vwzbvkln-3000.use.devtunnels.ms/status/slack/users");
+        const response = await axios.get(
+          "https://vwzbvkln-3000.use.devtunnels.ms/status/slack/users"
+        );
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -38,14 +40,17 @@ const SlackStatus: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (!users.length) return <div>No user data found.</div>;
 
+  // ** Create functions that will be referenced in the TSX markup **
+  // ** <LeftUsers /> **
+  // ** <RightUsers /> **
   const half = Math.ceil(users.length / 2);
   const leftUsers = users.slice(0, half);
   const rightUsers = users.slice(half);
 
   return (
     <div className="status-page">
-      <Weather /> 
-      
+      <Weather />
+
       <div className="slack-container">
         <div className="split-columns">
           <div className="column">
