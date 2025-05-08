@@ -38,30 +38,46 @@ const SlackStatus: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (!users.length) return <div>No user data found.</div>;
 
-  const half = Math.ceil(users.length / 2);
-  const leftUsers = users.slice(0, half);
-  const rightUsers = users.slice(half);
+  interface UserColumnProps {
+    users: SlackUserInfo[];
+  }
+  
+  const LeftUsers: React.FC<UserColumnProps> = ({ users }) => {
+    const half = Math.ceil(users.length / 2);
+    const leftUsers = users.slice(0, half);
+    return (
+      <div className="column">
+        {leftUsers.map((user) => (
+          <SlackUser key={user.id} user={user} />
+        ))}
+      </div>
+    );
+  };
+  
+  const RightUsers: React.FC<UserColumnProps> = ({ users }) => {
+    const half = Math.ceil(users.length / 2);
+    const rightUsers = users.slice(half);
+    return (
+      <div className="column">
+        {rightUsers.map((user) => (
+          <SlackUser key={user.id} user={user} />
+        ))}
+      </div>
+    );
+  };  
 
   return (
     <div className="status-page">
-      <Weather /> 
-      
+      <Weather />
+  
       <div className="slack-container">
         <div className="split-columns">
-          <div className="column">
-            {leftUsers.map((user) => (
-              <SlackUser key={user.id} user={user} />
-            ))}
-          </div>
-          <div className="column">
-            {rightUsers.map((user) => (
-              <SlackUser key={user.id} user={user} />
-            ))}
-          </div>
+          <LeftUsers users={users} />
+          <RightUsers users={users} />
         </div>
       </div>
     </div>
-  );
+  );  
 };
 
 export default SlackStatus;

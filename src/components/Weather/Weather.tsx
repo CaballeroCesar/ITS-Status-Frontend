@@ -3,10 +3,28 @@ import { weatherCodeMap } from "./weatherCodeMap";
 import "../../styles/Weather.scss";
 
 interface WeatherData {
-    temperature: number;
-    weathercode: number;
-  }
-  
+  temperature: number;
+  weathercode: number;
+}
+
+const WeatherEmoji: React.FC<{ weather: WeatherData }> = ({ weather }) => (
+  <span className="weather-emoji">
+    {weatherCodeMap[weather.weathercode]?.emoji || "🌡️"}
+  </span>
+);
+
+const WeatherTemperature: React.FC<{ weather: WeatherData }> = ({ weather }) => (
+  <span className="weather-temp">
+    {Math.round(weather.temperature)}°F
+  </span>
+);
+
+const WeatherLabel: React.FC<{ weather: WeatherData }> = ({ weather }) => (
+  <div className="weather-label">
+    {weatherCodeMap[weather.weathercode]?.label || "Unknown weather"}
+  </div>
+);
+
 const Weather: React.FC = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
 
@@ -31,25 +49,21 @@ const Weather: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  if (!weather) {
+    return (
+      <div className="weather-widget">
+        <p>Loading weather...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="weather-widget">
-      {weather ? (
-        <>
-          <div className="weather-main">
-            <span className="weather-emoji">
-              {weatherCodeMap[weather.weathercode]?.emoji || "🌡️"}
-            </span>
-            <span className="weather-temp">
-              {Math.round(weather.temperature)}°F
-            </span>
-          </div>
-          <div className="weather-label">
-            {weatherCodeMap[weather.weathercode]?.label || "Unknown weather"}
-          </div>
-        </>
-      ) : (
-        <p>Loading weather...</p>
-      )}
+      <div className="weather-main">
+        <WeatherEmoji weather={weather} />
+        <WeatherTemperature weather={weather} />
+      </div>
+      <WeatherLabel weather={weather} />
     </div>
   );
 };
